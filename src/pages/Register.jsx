@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import logo from "../assets/logo.svg";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
@@ -14,6 +14,14 @@ export default function Register() {
     password: "",
     confirmPassword: "",
   });
+
+  useEffect(()=>{
+    if(localStorage.getItem('chat-app-user')){
+      navigate('/');
+    }
+  },[])
+
+
 
   const handleChange = (event) => {
     SetValue({ ...value, [event.target.name]: event.target.value });
@@ -67,12 +75,13 @@ export default function Register() {
       });
 
       console.log("data", data.status);
+      console.log(data);
       if (data.status == false) {
         console.log(data.message);
         toast.error(data.message, toastOptions);
       }
       if (data.status === true) {
-        localStorage.setItem("chat-app-user", JSON.stringify(data.user));
+        localStorage.setItem("chat-app-user", JSON.stringify(data.data));
         navigate("/login");
       }
     }
